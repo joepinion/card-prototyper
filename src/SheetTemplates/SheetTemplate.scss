@@ -1,0 +1,9 @@
+.sheet {
+    &-printable {
+        .sheet-page {
+            @media print {
+                page-break-after: always;
+            }
+        }
+    }
+}
