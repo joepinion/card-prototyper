@@ -1,18 +1,14 @@
 .card {
     border: 1px solid black;
     box-sizing: border-box;
-    font-size: 14px;
     overflow: hidden;
-    line-height: 18px;
     border-radius: 4px;
     &-american-standard{
         width: 215px;
         height: 322px;
-        padding: 8px;
     }
     &-american-mini {
         width: 150px;
         height: 235px;
-        padding: 8px 8px;
     }
 }

@@ -49,7 +49,6 @@ export default class PrintableSheet extends SheetTemplateBase {
             for(let i=1; i<=this.getMaxPages(); i++) {
                 pages.push(i);
             }
-            console.log(pages);
         }
         return <div className={this.getClass()}>
             {pages.map((page_num) => this.renderPage(page_num))}
