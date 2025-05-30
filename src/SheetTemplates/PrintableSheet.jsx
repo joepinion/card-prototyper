@@ -33,7 +33,7 @@ export default class PrintableSheet extends SheetTemplateBase {
                 }
                 row.push(cards_on_page[r*this.props.cardsPerRow+c]);
             }
-            rows.push(<div className="sheet-row flex flex-row justify-center items-start">
+            rows.push(<div key={r} className="sheet-row flex flex-row justify-center items-start">
                 {row}
             </div>);
         }

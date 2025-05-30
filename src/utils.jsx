@@ -29,3 +29,8 @@ export function makeCardsFromData(data, options) {
     };
     return cards;
 }
+
+export default {
+    loadCsvDataFromUrl,
+    makeCardsFromData
+};
