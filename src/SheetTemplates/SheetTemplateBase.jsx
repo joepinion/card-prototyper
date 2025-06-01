@@ -1,6 +1,6 @@
 import React from 'react';
 import './SheetTemplate.scss';
-import {loadCsvDataFromUrl, makeCardsFromData} from '../utils';
+import {downloadDomImage, loadCsvDataFromUrl, makeCardsFromData} from '../utils';
 export default class SheetTemplateBase extends React.Component {
     constructor(props) {
         super(props);
@@ -30,8 +30,18 @@ export default class SheetTemplateBase extends React.Component {
     getClass() {
         return "sheet";
     }
+    doDownload() {
+        downloadDomImage(this.props.download_id);
+    }
+    getDownloadButton() {
+        return <div className="sheet-download-button">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>this.doDownload()}>
+                Download
+            </button>
+        </div>
+    }
     renderSheet() {
-        return <div className={this.getClass()}>
+        return <div className={this.getClass()} id={this.props.download_id ? this.props.download_id : null}>
             {this.getContent()}
         </div>;
     }
@@ -39,6 +49,9 @@ export default class SheetTemplateBase extends React.Component {
         if(!this.state.cards) {
             return null;
         }
-        return this.renderSheet();
+        return <>
+            {this.props.download_id && this.getDownloadButton()}
+            {this.renderSheet()}
+        </>;
     }
 }

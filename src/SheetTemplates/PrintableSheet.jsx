@@ -42,7 +42,7 @@ export default class PrintableSheet extends SheetTemplateBase {
         </div>;
     }
 
-    renderSheet() {
+    getContent() {
         let pages = this.props.pages;
         if(!pages) {
             pages = [];
@@ -50,8 +50,8 @@ export default class PrintableSheet extends SheetTemplateBase {
                 pages.push(i);
             }
         }
-        return <div className={this.getClass()}>
+        return <>
             {pages.map((page_num) => this.renderPage(page_num))}
-        </div>;
+        </>;
     }
 }

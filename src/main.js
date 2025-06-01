@@ -2,6 +2,7 @@ import CardProto from './CardPrototyper.jsx'
 import utils from './utils.jsx'
 import SheetTemplateBase from './SheetTemplates/SheetTemplateBase.jsx';
 import PrintableSheet from './SheetTemplates/PrintableSheet.jsx';
+import GridSheet from './SheetTemplates/GridSheet.jsx';
 import CardAmericanStandard from './CardTemplates/CardAmericanStandard.jsx';
 import CardAmericanMini from './CardTemplates/CardAmericanMini.jsx';
 import CardTemplateBase from './CardTemplates/CardTemplateBase.jsx';
@@ -14,7 +15,8 @@ const CardPrototyper = {
     utils: utils,
     sheets: {
       SheetTemplateBase, 
-      PrintableSheet
+      PrintableSheet,
+      GridSheet
     },
     cards: {
       CardTemplateBase,

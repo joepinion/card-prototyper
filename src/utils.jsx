@@ -1,6 +1,7 @@
 import Papa from 'papaparse';
 import CardTemplateBase from './CardTemplates/CardTemplateBase';
 import React from 'react';
+import domtoimage from 'dom-to-image-more';
 
 export function loadCsvDataFromUrl(url) {
     return new Promise((resolve) => {
@@ -12,6 +13,19 @@ export function loadCsvDataFromUrl(url) {
               }
         });
     })
+}
+
+export function downloadDomImage(id, bgcolor="#FFFFFF") {
+    domtoimage.toBlob(
+        document.getElementById(id), 
+        {
+            bgcolor: bgcolor,
+            copyDefaultStyles: false,
+        }
+    ).then((blob) => {
+        let link=window.URL.createObjectURL(blob);
+        window.location=link;
+    });
 }
 
 export function makeCardsFromData(data, options) {
@@ -86,4 +100,5 @@ export default {
     loadCsvDataFromUrl,
     makeCardsFromData,
     getTextProcessor,
+    downloadDomImage,
 };

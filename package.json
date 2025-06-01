@@ -20,6 +20,7 @@
   "homepage": "https://github.com/joepinion/card-prototyper#readme",
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
+    "dom-to-image-more": "^3.6.0",
     "papaparse": "^5.5.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
