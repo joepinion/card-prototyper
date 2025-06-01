@@ -3,6 +3,9 @@ import CardTemplateBase from './CardTemplates/CardTemplateBase';
 import React from 'react';
 import domtoimage from 'dom-to-image-more';
 
+export const IMAGE_SCALE = 3;
+export const PX_PER_INCH = 92;
+
 export function loadCsvDataFromUrl(url) {
     return new Promise((resolve) => {
          Papa.parse(url, {
@@ -15,9 +18,9 @@ export function loadCsvDataFromUrl(url) {
     })
 }
 
-export function downloadDomImage(id, bgcolor="#FFFFFF") {
+export function downloadDomImage(id, bgcolor="#FFFFFF", scale=IMAGE_SCALE) {
     return new Promise(r=>{
-        getDomImageBlob(id, bgcolor).then((blob) => {
+        getDomImageBlob(id, bgcolor, scale).then((blob) => {
             let link=window.URL.createObjectURL(blob);
             r(link);
             download(link);
@@ -32,13 +35,15 @@ export function download(href) {
     a.click();
 }
 
-export function getDomImageBlob(id, bgcolor="#FFFFFF") {
+export function getDomImageBlob(id, bgcolor="#FFFFFF", scale=IMAGE_SCALE) {
     return new Promise(r=>{
         domtoimage.toBlob(
             document.getElementById(id), 
             {
                 bgcolor: bgcolor,
                 copyDefaultStyles: false,
+                quality: 1,
+                scale: scale,
             }
         ).then((blob) => {
             r(blob);
@@ -46,13 +51,15 @@ export function getDomImageBlob(id, bgcolor="#FFFFFF") {
     });
 }
 
-export function getDomImageData(id, bgcolor="#FFFFFF") {
+export function getDomImageData(id, bgcolor="#FFFFFF", scale=IMAGE_SCALE) {
     return new Promise(r=>{
         domtoimage.toPng(
             document.getElementById(id), 
             {
                 bgcolor: bgcolor,
                 copyDefaultStyles: false,
+                quality: 1,
+                scale: scale,
             }
         ).then((d) => {
             r(d);

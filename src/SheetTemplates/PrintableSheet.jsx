@@ -1,4 +1,4 @@
-import { getDomImageBlob, getDomImageData } from "../utils";
+import { getDomImageData, IMAGE_SCALE, PX_PER_INCH } from "../utils";
 import SheetTemplateBase from "./SheetTemplateBase";
 import { jsPDF } from "jspdf";
 
@@ -59,7 +59,12 @@ export default class PrintableSheet extends SheetTemplateBase {
                 {row}
             </div>);
         }
-        return <div key={page_num} id={this.getPageId(page_num, is_back)} className="sheet-page flex flex-col items-center justify-start">
+        return <div 
+            key={page_num} 
+            id={this.getPageId(page_num, is_back)} 
+            className="sheet-page flex flex-col items-center justify-start"
+            style={{minWidth: this.props.cardInfo.template.getWidth()*this.props.cardsPerRow, minHeight: this.props.cardInfo.template.getHeight()*this.props.rowsPerPage}}
+        >
             {rows}
         </div>;
     }
@@ -70,24 +75,37 @@ export default class PrintableSheet extends SheetTemplateBase {
 
     doNextPageImage() {
         if(this.state.page_images.length===this.getMaxPages(true)) {
-            this.setState({prepping_download: "Prepping PDF for download."});
             let pdf = new jsPDF({
-                orientation: this.props.orientation || "landscape",
+                orientation: this.props.orientation || "portait",
                 format: this.props.format || "letter",
-                unit: this.props.unit || "in",
+                unit: "in",
+                compress: false
             });
             for(let [i, page_image] of this.state.page_images.entries()) {
                 if(i!==0) {
                     pdf.addPage();
                 }
-                pdf.addImage(page_image, "png", .5, .5, 0, 0, null, "NONE");
+                pdf.addImage(
+                    page_image, 
+                    "png", 
+                    this.props.margin || .3, 
+                    this.props.margin || .3, 
+                    this.props.cardInfo.template.getWidth()/PX_PER_INCH*this.props.cardsPerRow, 
+                    this.props.cardInfo.template.getHeight()/PX_PER_INCH*this.props.rowsPerPage, 
+                    null,
+                    this.props.compression || "FAST"
+                );
             }
             pdf.save(`${this.props.download_id}.pdf`);
             this.setState({prepping_download: false});
             return;
         }
         let page_num = this.state.page_images.length+1;
-        this.setState({prepping_download: `Prepping image of page ${page_num}.`});
+        let last_page = "";
+        if(this.state.page_images.length+1===this.getMaxPages(true)) {
+            last_page = " and generating PDF";
+        }
+        this.setState({prepping_download: `Prepping image of page ${page_num}${last_page}.`});
         let is_back = false;
         if(this.hasBacks()) {
             if(page_num%2===1) {
@@ -96,8 +114,11 @@ export default class PrintableSheet extends SheetTemplateBase {
             page_num = Math.floor(page_num/2);
         }
         let page_id = this.getPageId(page_num, is_back);
-        getDomImageData(page_id).then(d=>{
-            this.setState({page_images: [...this.state.page_images, d]});
+        getDomImageData(page_id, this.props.bgcolor || "#FFFFFF", this.props.scale || IMAGE_SCALE).then(d=>{
+            let state_update = {
+                page_images: [...this.state.page_images, d]
+            }
+            this.setState(state_update);
         })
     }
 

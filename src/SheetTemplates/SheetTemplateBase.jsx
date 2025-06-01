@@ -1,6 +1,6 @@
 import React from 'react';
 import './SheetTemplate.scss';
-import {downloadDomImage, loadCsvDataFromUrl, makeCardsFromData} from '../utils';
+import {downloadDomImage, IMAGE_SCALE, loadCsvDataFromUrl, makeCardsFromData} from '../utils';
 export default class SheetTemplateBase extends React.Component {
     constructor(props) {
         super(props);
@@ -44,7 +44,7 @@ export default class SheetTemplateBase extends React.Component {
     }
     doDownload() {
         this.setState({prepping_download: "Prepping image."});
-        downloadDomImage(this.props.download_id).then(l=>{
+        downloadDomImage(this.props.download_id, this.props.bgcolor || "#FFFFFF", this.props.scale || IMAGE_SCALE).then(l=>{
             this.setState({prepping_download: false});
         });
     }
