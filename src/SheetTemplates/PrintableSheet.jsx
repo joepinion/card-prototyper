@@ -16,11 +16,11 @@ export default class PrintableSheet extends SheetTemplateBase {
         return this.props.rowsPerPage * this.props.cardsPerRow;
     }
 
-    renderPage(page_num) {
+    renderPage(page_num, is_back=false) {
         if(page_num>this.getMaxPages()) {
             return null;
         }
-        let cards_on_page = this.state.cards.slice((page_num-1)*this.getCardsPerPage(), page_num*this.getCardsPerPage());
+        let cards_on_page = this.state[is_back ? "backs" : "cards"].slice((page_num-1)*this.getCardsPerPage(), page_num*this.getCardsPerPage());
         let rows = [];
         for(let r=0; r<this.props.rowsPerPage; r++) {
             if(r*this.props.cardsPerRow >= cards_on_page.length) {
@@ -31,7 +31,11 @@ export default class PrintableSheet extends SheetTemplateBase {
                 if(r*this.props.cardsPerRow+c >= cards_on_page.length) {
                     break;
                 }
-                row.push(cards_on_page[r*this.props.cardsPerRow+c]);
+                if(is_back) {
+                    row.unshift(cards_on_page[r*this.props.cardsPerRow+c]);
+                } else {
+                    row.push(cards_on_page[r*this.props.cardsPerRow+c]);
+                }
             }
             rows.push(<div key={r} className="sheet-row flex flex-row justify-center items-start">
                 {row}
@@ -50,8 +54,15 @@ export default class PrintableSheet extends SheetTemplateBase {
                 pages.push(i);
             }
         }
+        let rendered_pages = [];
+        for(let one_page of pages) {
+            rendered_pages.push(this.renderPage(one_page));
+            if(this.state.backs.length===this.state.cards.length) {
+                rendered_pages.push(this.renderPage(one_page, true));
+            }
+        }
         return <>
-            {pages.map((page_num) => this.renderPage(page_num))}
+           {rendered_pages} 
         </>;
     }
 }

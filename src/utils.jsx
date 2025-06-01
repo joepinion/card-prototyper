@@ -44,6 +44,28 @@ export function makeCardsFromData(data, options) {
     return cards;
 }
 
+export function genericBackTemplate(base_template, content, options={}) {
+    class BackTemplate extends base_template {
+        getContent() {
+            let styles = {};
+            if(options.bg_color) {
+                styles.backgroundColor = options.bgcolor;
+            }
+            if(options.text_color) {
+                styles.color = options.text_color;
+            }
+            let classes = ["w-full", "h-full", "flex", "flex-col", "items-center", "justify-center"];
+            if(options.classes) {
+                classes = [...classes, ...options.classes];
+            }
+            return <div className={classes.join(" ")} style={styles}>
+                {content}
+            </div>
+        }
+    }
+    return BackTemplate;
+}
+
 export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-block h-[15px] w-auto relative bottom-[2px]") {
     return (text, icon_class=default_icon_class) => {
         if(!text) return "";
@@ -101,4 +123,5 @@ export default {
     makeCardsFromData,
     getTextProcessor,
     downloadDomImage,
+    genericBackTemplate,
 };

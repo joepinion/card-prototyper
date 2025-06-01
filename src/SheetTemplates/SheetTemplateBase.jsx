@@ -6,6 +6,7 @@ export default class SheetTemplateBase extends React.Component {
         super(props);
         this.state = {
             cards: [],
+            backs: [],
             data: null,
         }
     }
@@ -14,12 +15,22 @@ export default class SheetTemplateBase extends React.Component {
             let opt = this.props.cardInfo;
             if(this.props.cardInfo.data) {
                 this.setState({cards: makeCardsFromData(this.props.cardInfo.data, opt)});
+                if(this.props.cardInfo.back_template) {
+                    this.setState({
+                        backs: makeCardsFromData(this.props.cardInfo.data, Object.assign({}, opt, {template: this.props.cardInfo.back_template}))
+                    })
+                }
             } else if(this.props.cardInfo.data_url) {
                 loadCsvDataFromUrl(this.props.cardInfo.data_url).then((results) => {
                     this.setState({
                         cards: makeCardsFromData(results.data, opt), 
                         data: results.data
                     });
+                    if(this.props.cardInfo.back_template) {
+                        this.setState({
+                            backs: makeCardsFromData(results.data, Object.assign({}, opt, {template: this.props.cardInfo.back_template}))
+                        })
+                    }
                 });
             }
         }

@@ -189,6 +189,9 @@
   .h-\[15px\] {
     height: 15px;
   }
+  .h-full {
+    height: 100%;
+  }
   .w-auto {
     width: auto;
   }
