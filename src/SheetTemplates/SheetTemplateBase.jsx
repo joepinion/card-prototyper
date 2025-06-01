@@ -8,6 +8,7 @@ export default class SheetTemplateBase extends React.Component {
             cards: [],
             backs: [],
             data: null,
+            prepping_download: false,
         }
     }
     componentDidMount() {
@@ -42,7 +43,10 @@ export default class SheetTemplateBase extends React.Component {
         return "sheet";
     }
     doDownload() {
-        downloadDomImage(this.props.download_id);
+        this.setState({prepping_download: "Prepping image."});
+        downloadDomImage(this.props.download_id).then(l=>{
+            this.setState({prepping_download: false});
+        });
     }
     getDownloadButton() {
         return <div className="sheet-download-button">
@@ -61,7 +65,8 @@ export default class SheetTemplateBase extends React.Component {
             return null;
         }
         return <>
-            {this.props.download_id && this.getDownloadButton()}
+            {this.props.download_id && !this.state.prepping_download && this.getDownloadButton()}
+            {this.state.prepping_download && <div>{this.state.prepping_download}</div>}
             {this.renderSheet()}
         </>;
     }

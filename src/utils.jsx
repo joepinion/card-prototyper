@@ -16,15 +16,47 @@ export function loadCsvDataFromUrl(url) {
 }
 
 export function downloadDomImage(id, bgcolor="#FFFFFF") {
-    domtoimage.toBlob(
-        document.getElementById(id), 
-        {
-            bgcolor: bgcolor,
-            copyDefaultStyles: false,
-        }
-    ).then((blob) => {
-        let link=window.URL.createObjectURL(blob);
-        window.location=link;
+    return new Promise(r=>{
+        getDomImageBlob(id, bgcolor).then((blob) => {
+            let link=window.URL.createObjectURL(blob);
+            r(link);
+            download(link);
+        });
+    });
+}
+
+export function download(href) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.download = 'image.png';
+    a.click();
+}
+
+export function getDomImageBlob(id, bgcolor="#FFFFFF") {
+    return new Promise(r=>{
+        domtoimage.toBlob(
+            document.getElementById(id), 
+            {
+                bgcolor: bgcolor,
+                copyDefaultStyles: false,
+            }
+        ).then((blob) => {
+            r(blob);
+        });
+    });
+}
+
+export function getDomImageData(id, bgcolor="#FFFFFF") {
+    return new Promise(r=>{
+        domtoimage.toPng(
+            document.getElementById(id), 
+            {
+                bgcolor: bgcolor,
+                copyDefaultStyles: false,
+            }
+        ).then((d) => {
+            r(d);
+        });
     });
 }
 
@@ -122,6 +154,5 @@ export default {
     loadCsvDataFromUrl,
     makeCardsFromData,
     getTextProcessor,
-    downloadDomImage,
     genericBackTemplate,
 };
