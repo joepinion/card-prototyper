@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+ul, ol {
+    li {
+        margin: 2px 0px;
+    }
+}

@@ -9,7 +9,7 @@ export default class PrintableSheet extends SheetTemplateBase {
     }
 
     getMaxPages() {
-        return Math.ceil(this.props.cards.length / this.getCardsPerPage());
+        return Math.ceil(this.state.cards.length / this.getCardsPerPage());
     }
 
     getCardsPerPage() {
@@ -20,7 +20,7 @@ export default class PrintableSheet extends SheetTemplateBase {
         if(page_num>this.getMaxPages()) {
             return null;
         }
-        let cards_on_page = this.props.cards.slice((page_num-1)*this.getCardsPerPage(), page_num*this.getCardsPerPage());
+        let cards_on_page = this.state.cards.slice((page_num-1)*this.getCardsPerPage(), page_num*this.getCardsPerPage());
         let rows = [];
         for(let r=0; r<this.props.rowsPerPage; r++) {
             if(r*this.props.cardsPerRow >= cards_on_page.length) {
@@ -42,7 +42,7 @@ export default class PrintableSheet extends SheetTemplateBase {
         </div>;
     }
 
-    render() {
+    renderSheet() {
         let pages = this.props.pages;
         if(!pages) {
             pages = [];
