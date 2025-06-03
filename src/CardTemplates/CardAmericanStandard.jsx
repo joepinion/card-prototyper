@@ -5,7 +5,7 @@ export default class CardAmericanStandard extends CardTemplateBase {
         super(props);
     }
     static getWidth() {
-        return 215;
+        return 228;
     }
     static getHeight() {
         return 322;
