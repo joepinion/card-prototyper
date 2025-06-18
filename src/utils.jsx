@@ -2,6 +2,7 @@ import Papa from 'papaparse';
 import CardTemplateBase from './CardTemplates/CardTemplateBase';
 import React from 'react';
 import domtoimage from 'dom-to-image-more';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const IMAGE_SCALE = 3;
 export const PX_PER_INCH = 92;
@@ -70,7 +71,11 @@ export function getDomImageData(id, bgcolor="#FFFFFF", scale=IMAGE_SCALE) {
 export function makeCardsFromData(data, options) {
     if(!options.template) options.template = CardTemplateBase;
     let cards = [];
-    for(let [i, item] of data.entries()) {
+    let filtered_data = data;
+    if(options.changed_only) {
+        filtered_data = data.filter(x=>x[options.changed_only]);
+    }
+    for(let [i, item] of filtered_data.entries()) {
         let count = 1;
         if(options.quantity_field) {
             count = item[options.quantity_field];
@@ -124,7 +129,9 @@ export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-bl
                 ...Object.keys(jsx),
                 ">"
             ].map(x=>RegExp.escape(x));
-            let rx = new RegExp(String.raw`\[(${all_array.join("|")})\]`, "g");
+            let rx = new RegExp(
+                String.raw`\[(${all_array.join("|")}|fas:[A-Za-z]+|far:[A-Za-z]+|fab:[A-Za-z]+)\]`
+            , "g");
             let split_for_items = txt.split(rx);
             for(let [index, one_item] of split_for_items.entries()) {
                 if(index%2===0) {
@@ -135,6 +142,21 @@ export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-bl
                     items_jsx.push(
                         <p key={"items_"+index+"_"+spl_ranger}></p>
                     );
+                } else if(one_item.slice(0,4)==="fas:") {
+                    let icon_name = one_item.slice(4);
+                    items_jsx.push(<span key={spl_ranger+"_fas_"+index} className={"text-icon text-icon-"+one_item}>
+                        <FontAwesomeIcon icon={`fa-solid fa-${icon_name}`} />
+                    </span>);
+                } else if(one_item.slice(0,4)==="far:") {
+                    let icon_name = one_item.slice(4);
+                    items_jsx.push(<span key={spl_ranger+"_fas_"+index} className={"text-icon text-icon-"+one_item}>
+                        <FontAwesomeIcon icon={`fa-regular fa-${icon_name}`} />
+                    </span>);
+                } else if(one_item.slice(0,4)==="fab:") {
+                    let icon_name = one_item.slice(4);
+                    items_jsx.push(<span key={spl_ranger+"_fas_"+index} className={"text-icon text-icon-"+one_item}>
+                        <FontAwesomeIcon icon={`fa-brands fa-${icon_name}`} />
+                    </span>);
                 } else if(Object.keys(icons).includes(one_item)) {
                     let icon_src = icons[one_item];
                     items_jsx.push(<span key={spl_ranger+"_ico_"+index} className={"text-icon text-icon-"+one_item}><img src={icon_src} alt={one_item} className={icon_class} /></span>);

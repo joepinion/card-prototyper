@@ -6,7 +6,8 @@
   "description": "Library for using data to quickly create prototype cards for tabletop games.",
   "main": "./src/main.js",
   "scripts": {
-    "tailwind-watch": "npx @tailwindcss/cli -i ./src/main.css -o ./src/output.css --watch"
+    "tailwind-watch": "npx @tailwindcss/cli -i ./src/main.css -o ./src/output.css --watch",
+    "postinstall": "degit game-icons/icons game_icons"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,13 @@
   },
   "homepage": "https://github.com/joepinion/card-prototyper#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@tailwindcss/cli": "^4.1.8",
+    "degit": "^2.8.4",
     "dom-to-image-more": "^3.6.0",
     "jspdf": "^3.0.1",
     "papaparse": "^5.5.2",

@@ -96,7 +96,11 @@ export default class PrintableSheet extends SheetTemplateBase {
                     this.props.compression || "FAST"
                 );
             }
-            pdf.save(`${this.props.download_id}.pdf`);
+            try {
+                pdf.save(`${this.props.download_id}.pdf`);
+            } catch(e) {
+                console.error("Error saving PDF:", e);
+            }
             this.setState({prepping_download: false});
             return;
         }
