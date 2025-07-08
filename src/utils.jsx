@@ -3,6 +3,7 @@ import CardTemplateBase from './CardTemplates/CardTemplateBase';
 import React from 'react';
 import domtoimage from 'dom-to-image-more';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GameIcon } from "./gameIcons.jsx";
 
 export const IMAGE_SCALE = 3;
 export const PX_PER_INCH = 92;
@@ -110,8 +111,8 @@ export function genericBackTemplate(base_template, content, options={}) {
     return BackTemplate;
 }
 
-export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-block h-[15px] w-auto relative bottom-[2px]") {
-    return (text, icon_class=default_icon_class) => {
+export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-block h-[15px] w-auto relative bottom-[2px]", default_game_icon_size="15") {
+    return (text, icon_class=default_icon_class, game_icon_size=default_game_icon_size) => {
         if(!text) return "";
         text = text.replace(/(?:\r\n|\r|\n|\u2028)/g, '[>]');
         let jsx_to_return = [];
@@ -130,7 +131,7 @@ export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-bl
                 ">"
             ].map(x=>RegExp.escape(x));
             let rx = new RegExp(
-                String.raw`\[(${all_array.join("|")}|fas:[A-Za-z]+|far:[A-Za-z]+|fab:[A-Za-z]+)\]`
+                String.raw`\[(${all_array.join("|")}|fas\-[A-Za-z\-]+|fa\-[A-Za-z\-]+|fab\-[A-Za-z\-]+|gi-[A-Za-z0-9\-/]+)\]`
             , "g");
             let split_for_items = txt.split(rx);
             for(let [index, one_item] of split_for_items.entries()) {
@@ -142,22 +143,31 @@ export function getTextProcessor(icons={}, jsx={}, default_icon_class="inline-bl
                     items_jsx.push(
                         <p key={"items_"+index+"_"+spl_ranger}></p>
                     );
-                } else if(one_item.slice(0,4)==="fas:") {
+                } else if(one_item.slice(0,4)==="fas-") {
                     let icon_name = one_item.slice(4);
                     items_jsx.push(<span key={spl_ranger+"_fas_"+index} className={"text-icon text-icon-"+one_item}>
                         <FontAwesomeIcon icon={`fa-solid fa-${icon_name}`} />
                     </span>);
-                } else if(one_item.slice(0,4)==="far:") {
-                    let icon_name = one_item.slice(4);
-                    items_jsx.push(<span key={spl_ranger+"_fas_"+index} className={"text-icon text-icon-"+one_item}>
+                } else if(one_item.slice(0,3)==="fa-") {
+                    let icon_name = one_item.slice(3);
+                    items_jsx.push(<span key={spl_ranger+"_far_"+index} className={"text-icon text-icon-"+one_item}>
                         <FontAwesomeIcon icon={`fa-regular fa-${icon_name}`} />
                     </span>);
-                } else if(one_item.slice(0,4)==="fab:") {
+                } else if(one_item.slice(0,4)==="fab-") {
                     let icon_name = one_item.slice(4);
-                    items_jsx.push(<span key={spl_ranger+"_fas_"+index} className={"text-icon text-icon-"+one_item}>
+                    items_jsx.push(<span key={spl_ranger+"_fab_"+index} className={"text-icon text-icon-"+one_item}>
                         <FontAwesomeIcon icon={`fa-brands fa-${icon_name}`} />
                     </span>);
-                } else if(Object.keys(icons).includes(one_item)) {
+                } else if(one_item.slice(0,3)==="gi-") {
+                    let icon_name = one_item.slice(3);
+                    items_jsx.push(<span key={spl_ranger+"_gi_"+index} className={"text-icon text-icon-"+one_item}>
+                        <GameIcon 
+                            name={icon_name} 
+                            size={game_icon_size}
+                            style={{display: "inline-block"}}
+                        />
+                    </span>);
+                }else if(Object.keys(icons).includes(one_item)) {
                     let icon_src = icons[one_item];
                     items_jsx.push(<span key={spl_ranger+"_ico_"+index} className={"text-icon text-icon-"+one_item}><img src={icon_src} alt={one_item} className={icon_class} /></span>);
                 } else if(Object.keys(jsx).includes(one_item)) {
