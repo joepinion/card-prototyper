@@ -1,13 +1,13 @@
 {
   "name": "card-prototyper",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "Library for using data to quickly create prototype cards for tabletop games.",
   "main": "./src/main.js",
   "scripts": {
     "tailwind-watch": "npx @tailwindcss/cli -i ./src/main.css -o ./src/output.css --watch",
-    "postinstall": "rm -r ./game_icons; git clone https://github.com/game-icons/icons game_icons; rm -r ./game_icons/.git; node run game-icons",
+    "put-icons": "rm -r ./game_icons; git clone https://github.com/game-icons/icons game_icons; rm -r ./game_icons/.git; node run game-icons",
     "game-icons": "node ./game-icons.mjs"
   },
   "repository": {
