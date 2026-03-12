@@ -55,14 +55,14 @@ export default class PrintableSheet extends SheetTemplateBase {
                     row.push(cards_on_page[r*this.props.cardsPerRow+c]);
                 }
             }
-            rows.push(<div key={r} className="sheet-row flex flex-row justify-center items-start">
+            rows.push(<div key={r} className="sheet-row flex flex-row justify-start items-start w-full">
                 {row}
             </div>);
         }
         return <div 
             key={page_num} 
             id={this.getPageId(page_num, is_back)} 
-            className="sheet-page flex flex-col items-center justify-start"
+            className="sheet-page flex flex-col items-start justify-start"
             style={{minWidth: this.props.cardInfo.template.getWidth()*this.props.cardsPerRow, minHeight: this.props.cardInfo.template.getHeight()*this.props.rowsPerPage}}
         >
             {rows}
