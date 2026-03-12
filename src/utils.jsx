@@ -25,15 +25,15 @@ export function downloadDomImage(id, bgcolor="#FFFFFF", scale=IMAGE_SCALE) {
         getDomImageBlob(id, bgcolor, scale).then((blob) => {
             let link=window.URL.createObjectURL(blob);
             r(link);
-            download(link);
+            download(link, id);
         });
     });
 }
 
-export function download(href) {
+export function download(href, id) {
     const a = document.createElement('a');
     a.href = href;
-    a.download = 'image.png';
+    a.download = `${id}.png`;
     a.click();
 }
 

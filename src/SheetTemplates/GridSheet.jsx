@@ -39,7 +39,7 @@ export function GridSheetPages(props) {
     let grids = [];
     for(let i=1; i<=props.pages; i++) {
         grids.push(
-            <GridSheet {...props} key={"grid-"+i} offset={(i-1)*props.rows*props.cardsPerRow}/>
+            <GridSheet {...props} download_id={`${props.download_id_base}-${i}`} key={"grid-"+i} offset={(i-1)*props.rows*props.cardsPerRow}/>
         );
     }
     return grids;
