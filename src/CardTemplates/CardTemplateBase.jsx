@@ -14,6 +14,12 @@ export default class CardTemplateBase extends React.Component {
 
     getStyle() {
         if(!this.constructor.getWidth() || !this.constructor.getHeight()) return null;
+        if(this.props.options.landscape) {
+            return {
+                width: this.constructor.getHeight() + "px",
+                height: this.constructor.getWidth() + "px"
+            }    
+        }
         return {
             width: this.constructor.getWidth() + "px",
             height: this.constructor.getHeight() + "px"

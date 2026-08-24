@@ -55,12 +55,12 @@ export default class PrintableSheet extends SheetTemplateBase {
                     row.push(cards_on_page[r*this.props.cardsPerRow+c]);
                 }
             }
-            rows.push(<div key={r} className="sheet-row flex flex-row justify-start items-start w-full">
+            rows.push(<div key={`${is_back ? "br" : "r"}-${r}`} className="sheet-row flex flex-row justify-start items-start w-full">
                 {row}
             </div>);
         }
         return <div 
-            key={page_num} 
+            key={`page-${is_back ? "back" : "front"}-${page_num}`} 
             id={this.getPageId(page_num, is_back)} 
             className="sheet-page flex flex-col items-start justify-start"
             style={{minWidth: this.props.cardInfo.template.getWidth()*this.props.cardsPerRow, minHeight: this.props.cardInfo.template.getHeight()*this.props.rowsPerPage}}
@@ -71,6 +71,16 @@ export default class PrintableSheet extends SheetTemplateBase {
 
     doDownload() {
         this.setState({prepping_download: "Prepping image of page 1.", page_images: []});
+    }
+
+    getWidth() {
+        if(this.props.cardInfo.landscape) return this.props.cardInfo.template.getHeight();
+        return this.props.cardInfo.template.getWidth();
+    }
+
+    getHeight() {
+        if(this.props.cardInfo.landscape) return this.props.cardInfo.template.getWidth();
+        return this.props.cardInfo.template.getHeight();
     }
 
     doNextPageImage() {
@@ -90,8 +100,8 @@ export default class PrintableSheet extends SheetTemplateBase {
                     "png", 
                     this.props.margin || .3, 
                     this.props.margin || .3, 
-                    this.props.cardInfo.template.getWidth()/PX_PER_INCH*this.props.cardsPerRow, 
-                    this.props.cardInfo.template.getHeight()/PX_PER_INCH*this.props.rowsPerPage, 
+                    this.getWidth()/PX_PER_INCH*this.props.cardsPerRow, 
+                    this.getHeight()/PX_PER_INCH*this.props.rowsPerPage, 
                     null,
                     this.props.compression || "FAST"
                 );
@@ -115,8 +125,9 @@ export default class PrintableSheet extends SheetTemplateBase {
             if(page_num%2===1) {
                 is_back = true;
             }
-            page_num = Math.floor(page_num/2);
+            page_num = Math.ceil(page_num/2);
         }
+
         let page_id = this.getPageId(page_num, is_back);
         getDomImageData(page_id, this.props.bgcolor || "#FFFFFF", this.props.scale || IMAGE_SCALE).then(d=>{
             let state_update = {

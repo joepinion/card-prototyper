@@ -82,7 +82,7 @@ export function makeCardsFromData(data, options) {
             count = item[options.quantity_field];
         }
         for(let c=0; c<count; c++) {
-            let card = React.createElement(options.template, {data: item, key: `${i}-${c}`, processText: options.processText, options: options});
+            let card = React.createElement(options.template, {data: item, key: `${options.back ? 'back' : 'front'}-${i}-${c}`, processText: options.processText, options: options});
             cards.push(card);
         }
     };

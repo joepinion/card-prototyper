@@ -18,7 +18,7 @@ export default class SheetTemplateBase extends React.Component {
                 this.setState({cards: makeCardsFromData(this.props.cardInfo.data, opt)});
                 if(this.props.cardInfo.back_template) {
                     this.setState({
-                        backs: makeCardsFromData(this.props.cardInfo.data, Object.assign({}, opt, {template: this.props.cardInfo.back_template}))
+                        backs: makeCardsFromData(this.props.cardInfo.data, Object.assign({}, opt, {template: this.props.cardInfo.back_template, back: true}))
                     })
                 }
             } else if(this.props.cardInfo.data_url) {
@@ -29,7 +29,7 @@ export default class SheetTemplateBase extends React.Component {
                     });
                     if(this.props.cardInfo.back_template) {
                         this.setState({
-                            backs: makeCardsFromData(results.data, Object.assign({}, opt, {template: this.props.cardInfo.back_template}))
+                            backs: makeCardsFromData(results.data, Object.assign({}, opt, {template: this.props.cardInfo.back_template, back: true}))
                         })
                     }
                 });

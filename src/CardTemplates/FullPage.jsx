@@ -5,10 +5,10 @@ export default class FullPage extends CardTemplateBase {
         super(props);
     }
     static getWidth() {
-        return 650;
+        return 725;
     }
     static getHeight() {
-        return 970;
+        return 960;
     }
     getClass() {
         return super.getClass() + " card-full-page";
