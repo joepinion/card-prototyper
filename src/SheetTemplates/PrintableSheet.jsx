@@ -63,7 +63,7 @@ export default class PrintableSheet extends SheetTemplateBase {
             key={`page-${is_back ? "back" : "front"}-${page_num}`} 
             id={this.getPageId(page_num, is_back)} 
             className="sheet-page flex flex-col items-start justify-start"
-            style={{minWidth: this.props.cardInfo.template.getWidth()*this.props.cardsPerRow, minHeight: this.props.cardInfo.template.getHeight()*this.props.rowsPerPage}}
+            style={{minWidth: this.getWidth()*this.props.cardsPerRow, minHeight: this.getHeight()*this.props.rowsPerPage}}
         >
             {rows}
         </div>;
